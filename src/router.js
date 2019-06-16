@@ -1,6 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home.vue'
+import Products from './views/Products.vue'
+import Companies from './views/Companies.vue'
+import Cashflow from './views/Cashflow.vue'
+import Balance from './views/Balance.vue'
 
 Vue.use(Router)
 
@@ -10,6 +14,26 @@ export default new Router({
       path: '/',
       name: 'home',
       component: Home
+    },
+    {
+      path: '/products',
+      name: 'products',
+      component: Products
+    },
+    {
+      path: '/companies',
+      name: 'companies',
+      component: Companies
+    },
+    {
+      path: '/cashflow',
+      name: 'cashflow',
+      component: Cashflow
+    },
+    {
+      path: '/balance',
+      name: 'balance',
+      component: Balance
     },
     {
       path: '/about',

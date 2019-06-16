@@ -1,0 +1,22 @@
+Products
+---------
+Name		DisplayName	Brand		Category	Company
+
+Krie kra	Krie Kra Kl	Fernandes	Snacks		Fernandes
+
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+Company
+-------
+Name    Address     Phone      ContactPerson     ContactNumber
+
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+Cashflow
+-----------------
+Date    Source      Description     amount     plus/min
+
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+Balance
+Date   Start_Amount     Income      Expenses    End_Amount 
