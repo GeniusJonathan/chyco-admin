@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>Balance</h1>
-    <p>This view display a list of products. In this view we can also do CRUD operations on products.</p>
+    <p>This view display a list of Balance by day.</p>
   </div>
 </template>
 
