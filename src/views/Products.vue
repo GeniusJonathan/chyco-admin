@@ -1,40 +1,29 @@
 <template>
-  <div>
-    <h1>Products</h1>
-    <p>This view display a list of products. In this view we can also do CRUD operations on products.</p>
-    <hr>
-    <ul>
-      <li :key="product.id" v-for="product in products">
-        {{product.name}}
-      </li>
-    </ul>
-  </div>
+   <div>
+      <h1>Products</h1>
+      <p>This view display a list of products. In this view we can also do CRUD operations on products.</p>
+      <hr>
+      <ProductAdd />
+      <ul>
+         <li :key="product.id" v-for="product in allProducts">{{product.name}}</li>
+      </ul>
+   </div>
 </template>
 
 <script>
-import db from '../firebase/firebaseInit'
+import { mapGetters, mapActions } from "vuex";
+import ProductAdd from "@/components/ProductAdd.vue";
 export default {
-  data () {
-        return {
-            products: []
-        }
-    },
-    created() {
-        db.collection('products').orderBy('name').get().then
-        (querySnapshot => {
-            querySnapshot.forEach(doc => {
-                const data = {
-                    'id' : doc.id,
-                    'name' : doc.data().name,
-                    'brand' : doc.data().brand,
-                    'category' : doc.data().category,
-                    'company' : doc.data().company,
-                    'description' : doc.data().description,
-                }
-                this.products.push(data);
-            })
-        })
-    }
+   components: {
+     ProductAdd
+   },
+   methods: {
+    ...mapActions(["fetchProducts"])
+   },
+   computed: mapGetters(["allProducts"]),
+   created() {
+     this.fetchProducts();
+   }
 };
 </script>
 

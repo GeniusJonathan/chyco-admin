@@ -17,13 +17,15 @@
 import Sidenav from "@/components/layouts/Sidenav.vue";
 import Baseline from "@/components/layouts/Baseline.vue";
 import Dark from "@/components/layouts/Dark.vue";
+import Products from "@/views/Products.vue";
 
 export default {
   name: "app",
   components: {
     Sidenav,
     Dark,
-    Baseline
+    Baseline,
+    Products
   }
 };
 </script>
