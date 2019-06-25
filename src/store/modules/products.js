@@ -39,21 +39,48 @@ const actions = {
 				company: product.company,
 				description: product.description
 			})
-			.then(docRef => commit("newProduct", product))
+			.then(docRef => {
+				let newProduct = Object.assign({ id: docRef.id }, product); ;
+				commit("newProduct", newProduct);
+			})
 			.catch(error => console.log(error));
+	},
+	async updateProduct({ commit }, product) {
+		db.collection("products")
+			.doc(product.id)
+			.update({
+				name: product.name,
+				brand: product.brand,
+				company: product.company,
+				category: product.category,
+				description: product.description
+			})
+			.catch(error => console.log(error));
+			commit("modifyProduct", product);
+
+		
+	},
+	async deleteProduct({ commit }, id) {
+		db.collection("products")
+			.doc(id)
+			.delete()
+			.then(() => {
+				commit("removeProduct", id);
+			});
 	}
 };
 
 const mutations = {
 	setProducts: (state, products) => (state.products = products),
-	newProduct: (state, product) => state.products.unshift(product),
+	newProduct: (state, product) => state.products.push(product),
 	removeProduct: (state, id) =>
 		(state.products = state.products.filter(product => product.id !== id)),
-	updateTodo: (state, updatedProduct) => {
+	modifyProduct: (state, updatedProduct) => {
 		const index = state.products.findIndex(
 			product => product.id === updatedProduct.id
 		);
-		if (index !== -1) state.products.splice(index, 1, updatedProduct);
+		state.products[index] =Object.assign({}, updatedProduct);
+		state.products = state.products.filter(product => true)
 	}
 };
 
