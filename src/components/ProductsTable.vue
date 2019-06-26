@@ -151,6 +151,7 @@ export default {
          };
          if (this.$refs.form.validate()) {
             this.addProduct(product);
+            this.close();
          }
       },
       editItem(item) {
@@ -179,12 +180,14 @@ export default {
       save() {
          if (this.editedIndex > -1) {
             // Modify Product
-            this.updateProduct(this.editedItem);
+            if (this.$refs.form.validate()) {
+               this.updateProduct(this.editedItem);
+               this.close();
+            }
          } else {
             // Add new Product
             this.addNewProduct();
          }
-         this.close();
       }
    }
 };
