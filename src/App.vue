@@ -17,13 +17,17 @@
 import Sidenav from "@/components/layouts/Sidenav.vue";
 import Baseline from "@/components/layouts/Baseline.vue";
 import Dark from "@/components/layouts/Dark.vue";
+import Products from "@/views/Products.vue";
+import ProductsTable from "@/components/ProductsTable.vue";
 
 export default {
   name: "app",
   components: {
-    Sidenav,
+    // Sidenav,
     Dark,
-    Baseline
+    // Baseline,
+    // Products,
+    ProductsTable
   }
 };
 </script>

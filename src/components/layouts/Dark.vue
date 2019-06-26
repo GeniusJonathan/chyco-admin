@@ -56,6 +56,13 @@ export default {
 }
 
 #inspire {
-  max-height: calc(100vh - 64px);
+  min-height: calc(100vh - 64px);
+}
+
+.application--wrap{
+
+    overflow: auto;
+    min-height: auto;
+
 }
 </style>
