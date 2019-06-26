@@ -1,7 +1,7 @@
   <template>
    <div>
       <v-toolbar flat color="white">
-         <v-toolbar-title>Products</v-toolbar-title>
+         <v-toolbar-title>Companies</v-toolbar-title>
          <v-spacer></v-spacer>
          <v-dialog v-model="dialog" max-width="500px">
             <template v-slot:activator="{ on }">
@@ -12,7 +12,7 @@
             <v-form ref="form">
                <v-card>
                   <v-card-title>
-                     <span class="headline">Add Product</span>
+                     <span class="headline">Add Company</span>
                   </v-card-title>
                   <v-card-text>
                      <v-container grid-list-md>
@@ -26,30 +26,16 @@
                               ></v-text-field>
                            </v-flex>
                            <v-flex xs12>
-                              <v-text-field
-                                 v-model="editedItem.brand"
-                                 :rules="brandRules"
-                                 label="Brand*"
-                                 required
-                              ></v-text-field>
+                              <v-text-field v-model="editedItem.address" label="Address"></v-text-field>
                            </v-flex>
                            <v-flex xs12>
-                              <v-text-field
-                                 v-model="editedItem.company"
-                                 :rules="companyRules"
-                                 label="Company*"
-                                 required
-                              ></v-text-field>
-                           </v-flex>
-                           <v-flex xs12 sm6>
-                              <v-select
-                                 v-model="editedItem.category"
-                                 :items="categoryList"
-                                 label="Category"
-                              ></v-select>
+                              <v-text-field v-model="editedItem.phone" label="Phone"></v-text-field>
                            </v-flex>
                            <v-flex xs12>
-                              <v-text-field v-model="editedItem.description" label="Description"></v-text-field>
+                              <v-text-field v-model="editedItem.contactPerson" label="Contact Person"></v-text-field>
+                           </v-flex>
+                           <v-flex xs12>
+                              <v-text-field v-model="editedItem.contactNumber" label="Contact Number"></v-text-field>
                            </v-flex>
                         </v-layout>
                      </v-container>
@@ -64,13 +50,13 @@
             </v-form>
          </v-dialog>
       </v-toolbar>
-      <v-data-table :headers="headers" :items="allProducts" hide-actions class="elevation-1">
+      <v-data-table :headers="headers" :items="allCompanies" hide-actions class="elevation-1">
          <template v-slot:items="props">
             <td>{{ props.item.name }}</td>
-            <td>{{ props.item.brand }}</td>
-            <td>{{ props.item.company }}</td>
-            <td>{{ props.item.category }}</td>
-            <td>{{ props.item.description }}</td>
+            <td>{{ props.item.address }}</td>
+            <td>{{ props.item.phone }}</td>
+            <td>{{ props.item.contactPerson }}</td>
+            <td>{{ props.item.contactNumber }}</td>
             <td class="justify-center layout px-0">
                <v-icon small class="mr-2" @click="editItem(props.item)">edit</v-icon>
                <v-icon small @click="deleteItem(props.item)">delete</v-icon>
@@ -87,38 +73,29 @@ export default {
       dialog: false,
       nameRules: [
          v => !!v || "Name is required",
-         v => (v && v.length <= 20) || "Name must be less than 20 characters"
+         v => (v && v.length <= 50) || "Name must be less than 20 characters"
       ],
-      brandRules: [
-         v => !!v || "Brand is required",
-         v => (v && v.length <= 10) || "Brand must be less than 10 characters"
-      ],
-      companyRules: [
-         v => !!v || "Company is required",
-         v => (v && v.length <= 20) || "Company must be less than 20 characters"
-      ],
-      categoryList: ["Food & Drinks", "Snacks", "Prepaid Cards", "Other"],
       headers: [
-         { text: "Name", align: "left", sortable: true, value: "name" },
-         { text: "Brand", value: "brand", align: "left", sortable: true },
-         { text: "Company", value: "company", align: "left", sortable: true },
-         { text: "Category", value: "category", align: "left" },
-         { text: "Description", value: "description", align: "left" },
-         { text: "Actions", value: "name", sortable: false }
+         { text: "Name", value: "name", align: "left", sortable: true },
+         { text: "Address", value: "address", align: "left" },
+         { text: "Phone", value: "phone", align: "left" },
+         { text: "Contact Person", value: "contactPerson", align: "left" },
+         { text: "Contact Number", value: "contactNumber", align: "left" },
+         { text: "Actions", value: "actions" }
       ],
       editedIndex: -1,
       editedItem: {
          id: "",
          name: "",
-         brand: "",
-         company: "",
-         category: "",
-         description: ""
+         address: "",
+         phone: "",
+         contactPerson: "",
+         contactNumber: ""
       }
    }),
 
    computed: {
-      ...mapGetters(["allProducts"]),
+      ...mapGetters(["allCompanies"]),
       formTitle() {
          return this.editedIndex === -1 ? "New Item" : "Edit Item";
       }
@@ -131,26 +108,26 @@ export default {
    },
 
    created() {
-      this.fetchProducts();
+      this.fetchCompanies();
    },
 
    methods: {
       ...mapActions([
-         "fetchProducts",
-         "addProduct",
-         "updateProduct",
-         "deleteProduct"
+         "fetchCompanies",
+         "addCompany",
+         "updateCompany",
+         "deleteCompany"
       ]),
-      addNewProduct() {
-         let product = {
+      addNewCompany() {
+         let company = {
             name: this.editedItem.name,
-            brand: this.editedItem.brand,
-            company: this.editedItem.company,
-            category: this.editedItem.category,
-            description: this.editedItem.description
+            address: this.editedItem.address,
+            phone: this.editedItem.phone,
+            contactPerson: this.editedItem.contactPerson,
+            contactNumber: this.editedItem.contactNumber
          };
          if (this.$refs.form.validate()) {
-            this.addProduct(product);
+            this.addCompany(company);
             this.close();
          }
       },
@@ -165,7 +142,7 @@ export default {
             "Are you sure you want to delete this item?"
          );
          if (confirmDelete) {
-            this.deleteProduct(item.id);
+            this.deleteCompany(item.id);
          }
       },
 
@@ -179,14 +156,14 @@ export default {
 
       save() {
          if (this.editedIndex > -1) {
-            // Modify Product
+            // Modify Company
             if (this.$refs.form.validate()) {
-               this.updateProduct(this.editedItem);
+               this.updateCompany(this.editedItem);
                this.close();
             }
          } else {
-            // Add New Product
-            this.addNewProduct();
+            // Add New Company
+            this.addNewCompany();
          }
       }
    }
