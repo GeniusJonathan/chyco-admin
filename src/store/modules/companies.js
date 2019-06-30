@@ -5,7 +5,8 @@ const state = {
 };
 
 const getters = {
-	allCompanies: state => state.companies
+	allCompanies: state => state.companies,
+	getCompanyNames : state => state.companies.map(a => a.name)
 };
 
 const actions = {

@@ -9,8 +9,8 @@
 </template>
 
 <script>
-import ProductAdd from "@/components/ProductAdd.vue";
-import ProductsTable from "@/components/ProductsTable.vue";
+import ProductAdd from "@/components/ProductAdd";
+import ProductsTable from "@/components/ProductsTable";
 export default {
    components: {
      ProductAdd,
