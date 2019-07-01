@@ -14,15 +14,15 @@
             min-width="290px"
          >
             <template v-slot:activator="{ on }">
-               <v-text-field v-model="date" label="Date" prepend-icon="event" v-on="on"></v-text-field>
+               <v-text-field v-model="search" label="Date" prepend-icon="event" v-on="on"></v-text-field>
             </template>
-            <v-date-picker v-model="date" @input="menu1 = false"></v-date-picker>
+            <v-date-picker v-model="date" @input="dateSelected"></v-date-picker>
          </v-menu>
       </v-toolbar>
       <v-data-table
          :headers="headers"
          :items="allCashflows"
-         :search="date"
+         :search="search"
          hide-actions
          class="elevation-1"
       >
@@ -39,9 +39,15 @@
          </template>
 
          <template v-slot:footer>
-            <td :colspan="headers.length">
+            <!-- <td :colspan="headers.length">
                <strong>This is an extra footer</strong>
-            </td>
+            </td> -->
+            <td></td>
+            <td></td>
+            <td class="text-xs-left"><b>Total:</b></td>
+            <td class="text-xs-right total">{{getTotal}}</td>
+            <td class="total"></td>
+            <td></td>
          </template>
       </v-data-table>
 
@@ -147,15 +153,16 @@
       </v-dialog>
    </div>
 </template>
-
 <script>
 import { mapGetters, mapActions } from "vuex";
 export default {
    data: () => ({
       dialog: false,
       companies: ["test", "jon"],
+      cashflows: [],
       selectedCompany: "",
       selectedProduct: "",
+      search: new Date().toISOString().substr(0, 10),
       menu1: false,
       menu2: false,
       date: new Date().toISOString().substr(0, 10),
@@ -197,6 +204,26 @@ export default {
       ...mapGetters(["allCashflows", "getCompanyNames", "getProductNames"]),
       formTitle() {
          return this.editedIndex === -1 ? "New Item" : "Edit Item";
+      },
+      getIncoming() {
+         let incomingValues = this.allCashflows.filter(x => x.date === this.date && x.type === 'Incoming').map(x => x.amount);
+         let total = 0;
+         if (incomingValues.length > 0) {
+            total = incomingValues.reduce((a, b) => Number(a) + Number(b));
+         }
+         return Number.parseFloat(total).toFixed(2);
+      },
+      getOutgoing() {
+         let incomingValues = this.allCashflows.filter(x => x.date === this.date && x.type === 'Outgoing').map(x => x.amount);
+         let total = 0;
+         if (incomingValues.length > 0) {
+            total = incomingValues.reduce((a, b) => Number(a) + Number(b));
+         }
+         return Number.parseFloat(total).toFixed(2);
+      },
+      getTotal() {
+         let total = this.getIncoming - this.getOutgoing;
+         return Number.parseFloat(total).toFixed(2);
       }
    },
 
@@ -211,7 +238,9 @@ export default {
       this.fetchCompanies();
       this.fetchProducts();
    },
-
+   mounted() {
+      this.cashflows = this.allCashflows;
+   },
    methods: {
       ...mapActions([
          "fetchCashflows",
@@ -245,6 +274,10 @@ export default {
             this.addCashflow(cashflow);
             this.close();
          }
+      },
+      dateSelected() {
+         this.menu1 = false;
+         this.search = this.date;
       },
       editItem(item) {
          this.editedIndex = 1; // TODO: set to positive value to signal modal in EDIT mode
@@ -290,7 +323,11 @@ export default {
 
 <style>
 .helper {
-   border: 1px grey dashed;
+   border: 3px grey dashed;
    background-color:#EEEEEE;
+}
+
+.total {
+   border-top: 2px solid black;
 }
 </style>
