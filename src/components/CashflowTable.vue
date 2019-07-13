@@ -127,6 +127,7 @@
                               v-model="editedItem.amount"
                               label="Amount"
                               :rules="amountRules"
+                              validate-on-blur
                            ></v-text-field>
                         </v-flex>
                         <v-flex xs12>
