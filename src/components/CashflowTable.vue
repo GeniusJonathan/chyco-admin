@@ -38,120 +38,129 @@
             </td>
          </template>
 
-         <template v-slot:footer>
+         <template v-slot:footer v-if="canPrintZreport()">
             <!-- <td :colspan="headers.length">
                <strong>This is an extra footer</strong>
-            </td> -->
+            </td>-->
             <td></td>
             <td></td>
-            <td class="text-xs-left"><b>Total:</b></td>
+            <td class="text-xs-left">
+               <b>Total:</b>
+            </td>
             <td class="text-xs-right total">{{getTotal}}</td>
             <td class="total"></td>
             <td></td>
          </template>
       </v-data-table>
 
-      <!-- ADD ROW > Pops a dialog to add a cashflow row -->
-      <v-dialog v-model="dialog" min-width="600">
-         <!-- ADD ROW Button -->
-         <template v-slot:activator="{ on }">
-            <v-btn style="margin: 5px 0;" color="primary" dark class="mb-2" v-on="on">
-               <v-icon>add</v-icon>Add row
-            </v-btn>
-         </template>
-         <!-- FORM -->
-         <v-form ref="form">
-            <v-card>
-               <v-card-title>
-                  <span class="headline">Add Row</span>
-               </v-card-title>
-               <v-card-text>
-                  <v-container grid-list-md>
-                     <v-layout wrap>
-                        <v-flex xs12>
-                           <v-menu
-                              v-model="menu2"
-                              :close-on-content-click="false"
-                              :nudge-right="40"
-                              lazy
-                              transition="scale-transition"
-                              offset-y
-                              full-width
-                              min-width="290px"
-                           >
-                              <template v-slot:activator="{ on }">
-                                 <v-text-field
-                                    v-model="editedItem.date"
-                                    label="Date"
-                                    prepend-icon="event"
-                                    v-on="on"
-                                 ></v-text-field>
-                              </template>
-                              <v-date-picker v-model="editedItem.date" @input="menu2 = false"></v-date-picker>
-                           </v-menu>
-                        </v-flex>
-                        <v-flex xs8>
-                           <v-text-field v-model="editedItem.source" label="Source" clearable></v-text-field>
-                        </v-flex>
-                        <v-flex class="helper" xs4>
-                           <v-select
-                              v-model="selectedCompany"
-                              :items="getCompanyNames"
-                              menu-props="auto"
-                              label="Companies"
-                              hide-details
-                              @input="this.changeSourceValue"
-                              prepend-icon="search"
-                           ></v-select>
-                        </v-flex>
-                        <v-flex xs8>
-                           <v-textarea
-                              name="input-7-1"
-                              label="Info"
-                              v-model="editedItem.description"
-                           ></v-textarea>
-                        </v-flex>
-                        <v-flex class="helper" xs4 align-self-end>
-                           <v-autocomplete
-                              v-model="selectedProduct"
-                              :items="getProductNames"
-                              single-line
-                              label="Products"
-                              @input="this.changeDescriptionValue"
-                              prepend-icon="search"
-                              clearable
-                           ></v-autocomplete>
-                        </v-flex>
-                        <v-flex xs12>
-                           <v-text-field
-                              v-model="editedItem.amount"
-                              label="Amount"
-                              :rules="amountRules"
-                              validate-on-blur
-                           ></v-text-field>
-                        </v-flex>
-                        <v-flex xs12>
-                           <v-switch
-                              v-model="editedItem.type"
-                              :label="`Type: ${editedItem.type}`"
-                              append-icon="swap_horiz"
-                              false-value="Outgoing"
-                              true-value="Incoming"
-                              color="success"
-                           ></v-switch>
-                        </v-flex>
-                     </v-layout>
-                  </v-container>
-                  <small>*indicates required field</small>
-               </v-card-text>
-               <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn color="blue darken-1" flat @click="close">Close</v-btn>
-                  <v-btn color="blue darken-1" flat @click="save">Save</v-btn>
-               </v-card-actions>
-            </v-card>
-         </v-form>
-      </v-dialog>
+      <div id="actionBar">
+         <!-- ADD ROW > Pops a dialog to add a cashflow row -->
+         <v-dialog v-model="dialog" min-width="600">
+            <!-- ADD ROW Button -->
+            <template v-slot:activator="{ on }">
+               <v-btn style="margin: 5px 0;" color="primary" dark class="mb-2" v-on="on">
+                  <v-icon>add</v-icon>Add row
+               </v-btn>
+            </template>
+            <!-- FORM -->
+            <v-form ref="form">
+               <v-card>
+                  <v-card-title>
+                     <span class="headline">Add Row</span>
+                  </v-card-title>
+                  <v-card-text>
+                     <v-container grid-list-md>
+                        <v-layout wrap>
+                           <v-flex xs12>
+                              <v-menu
+                                 v-model="menu2"
+                                 :close-on-content-click="false"
+                                 :nudge-right="40"
+                                 lazy
+                                 transition="scale-transition"
+                                 offset-y
+                                 full-width
+                                 min-width="290px"
+                              >
+                                 <template v-slot:activator="{ on }">
+                                    <v-text-field
+                                       v-model="editedItem.date"
+                                       label="Date"
+                                       prepend-icon="event"
+                                       v-on="on"
+                                    ></v-text-field>
+                                 </template>
+                                 <v-date-picker v-model="editedItem.date" @input="menu2 = false"></v-date-picker>
+                              </v-menu>
+                           </v-flex>
+                           <v-flex xs8>
+                              <v-text-field v-model="editedItem.source" label="Source" clearable></v-text-field>
+                           </v-flex>
+                           <v-flex class="helper" xs4>
+                              <v-select
+                                 v-model="selectedCompany"
+                                 :items="getCompanyNames"
+                                 menu-props="auto"
+                                 label="Companies"
+                                 hide-details
+                                 @input="this.changeSourceValue"
+                                 prepend-icon="search"
+                              ></v-select>
+                           </v-flex>
+                           <v-flex xs8>
+                              <v-textarea
+                                 name="input-7-1"
+                                 label="Info"
+                                 v-model="editedItem.description"
+                              ></v-textarea>
+                           </v-flex>
+                           <v-flex class="helper" xs4 align-self-end>
+                              <v-autocomplete
+                                 v-model="selectedProduct"
+                                 :items="getProductNames"
+                                 single-line
+                                 label="Products"
+                                 @input="this.changeDescriptionValue"
+                                 prepend-icon="search"
+                                 clearable
+                              ></v-autocomplete>
+                           </v-flex>
+                           <v-flex xs12>
+                              <v-text-field
+                                 v-model="editedItem.amount"
+                                 label="Amount"
+                                 :rules="amountRules"
+                                 validate-on-blur
+                              ></v-text-field>
+                           </v-flex>
+                           <v-flex xs12>
+                              <v-switch
+                                 v-model="editedItem.type"
+                                 :label="`Type: ${editedItem.type}`"
+                                 append-icon="swap_horiz"
+                                 false-value="Outgoing"
+                                 true-value="Incoming"
+                                 color="success"
+                              ></v-switch>
+                           </v-flex>
+                        </v-layout>
+                     </v-container>
+                     <small>*indicates required field</small>
+                  </v-card-text>
+                  <v-card-actions>
+                     <v-spacer></v-spacer>
+                     <v-btn color="blue darken-1" flat @click="close">Close</v-btn>
+                     <v-btn color="blue darken-1" flat @click="save">Save</v-btn>
+                  </v-card-actions>
+               </v-card>
+            </v-form>
+         </v-dialog>
+         <v-btn
+            v-if="canPrintZreport()"
+            color="green lighten-1"
+            @click="printZreport(search, getIncoming, getOutgoing, getTotal )"
+         >Z - Report</v-btn>
+      </div>
    </div>
 </template>
 <script>
@@ -202,12 +211,19 @@ export default {
    }),
 
    computed: {
-      ...mapGetters(["allCashflows", "getCompanyNames", "getProductNames"]),
+      ...mapGetters([
+         "allCashflows",
+         "getCompanyNames",
+         "getProductNames",
+         "getLastBalance"
+      ]),
       formTitle() {
          return this.editedIndex === -1 ? "New Item" : "Edit Item";
       },
       getIncoming() {
-         let incomingValues = this.allCashflows.filter(x => x.date === this.date && x.type === 'Incoming').map(x => x.amount);
+         let incomingValues = this.allCashflows
+            .filter(x => x.date === this.date && x.type === "Incoming")
+            .map(x => x.amount);
          let total = 0;
          if (incomingValues.length > 0) {
             total = incomingValues.reduce((a, b) => Number(a) + Number(b));
@@ -215,7 +231,9 @@ export default {
          return Number.parseFloat(total).toFixed(2);
       },
       getOutgoing() {
-         let incomingValues = this.allCashflows.filter(x => x.date === this.date && x.type === 'Outgoing').map(x => x.amount);
+         let incomingValues = this.allCashflows
+            .filter(x => x.date === this.date && x.type === "Outgoing")
+            .map(x => x.amount);
          let total = 0;
          if (incomingValues.length > 0) {
             total = incomingValues.reduce((a, b) => Number(a) + Number(b));
@@ -238,9 +256,11 @@ export default {
       this.fetchCashflows();
       this.fetchCompanies();
       this.fetchProducts();
+      this.fetchLastBalance();
    },
    mounted() {
       this.cashflows = this.allCashflows;
+      this.lastBalance = this.getLastBalance;
    },
    methods: {
       ...mapActions([
@@ -249,7 +269,9 @@ export default {
          "fetchProducts",
          "addCashflow",
          "updateCashflow",
-         "deleteCashflow"
+         "deleteCashflow",
+         "fetchLastBalance",
+         "addBalance"
       ]),
       changeSourceValue() {
          this.editedItem.source = this.selectedCompany;
@@ -305,7 +327,6 @@ export default {
             this.selectedProduct = "";
          }, 300);
       },
-
       save() {
          if (this.editedIndex > -1) {
             // Modify Cashflow
@@ -317,6 +338,27 @@ export default {
             // Add New Cashflow
             this.addNewCashflow();
          }
+      },
+      printZreport(date, incoming, outgoing, total) {
+         let confirmZreport = confirm("Are you sure?");
+         if (confirmZreport) {
+            let endAmount = +this.getLastBalance + +total;
+
+            let balance = {
+               date: date,
+               start_amount: this.getLastBalance,
+               incoming: incoming,
+               outgoing: outgoing,
+               end_amount: Number.parseFloat(endAmount).toFixed(2)
+            };
+            this.addBalance(balance);
+         }
+      },
+      canPrintZreport() {
+         var regex = RegExp(
+            /([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))/
+         );
+         return regex.test(this.search);
       }
    }
 };
@@ -325,10 +367,15 @@ export default {
 <style>
 .helper {
    border: 3px grey dashed;
-   background-color:#EEEEEE;
+   background-color: #eeeeee;
 }
 
 .total {
    border-top: 2px solid black;
+}
+
+#actionBar {
+   display: flex;
+   justify-content: space-between;
 }
 </style>

@@ -76,7 +76,7 @@
             </v-form>
          </v-dialog>
       </v-toolbar>
-      <v-data-table :headers="headers" :items="allBalances" hide-actions class="elevation-1">
+      <v-data-table :headers="headers" :items="allBalances" :pagination.sync="pagination" hide-actions class="elevation-1">
          <template v-slot:items="props">
             <td>{{ props.item.date }}</td>
             <td class="text-xs-right">{{ props.item.start_amount }}</td>
@@ -98,6 +98,10 @@ export default {
    data: () => ({
       dialog: false,
       menu: false,
+      pagination: {
+        sortBy: 'date',
+        descending: true
+      },
       nameRules: [
          v => !!v || "Name is required",
          v => (v && v.length <= 50) || "Name must be less than 20 characters"

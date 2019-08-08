@@ -1,11 +1,14 @@
 import db from "../firebaseInit";
+import router from "../../router"
 
 const state = {
-	balances: []
+	balances: [],
+	lastBalance: 0
 };
 
 const getters = {
 	allBalances: state => state.balances,
+	getLastBalance: state => state.lastBalance
 };
 
 const actions = {
@@ -30,6 +33,17 @@ const actions = {
 
 		commit("setBalances", fetchedBalances);
 	},
+	async fetchLastBalance( { commit} ) {
+		db.collection("balances")
+			.orderBy("date", "desc")
+			.limit(1)
+			.get()
+			.then(querySnapshot => {
+				querySnapshot.forEach(doc => {
+					commit("setLastBalance", doc.data().end_amount)
+				});
+			});	
+	},
 	async addBalance({ commit }, balance) {
 		db.collection("balances")
 			.add({
@@ -42,6 +56,7 @@ const actions = {
 			.then(docRef => {
 				let newBalance = Object.assign({ id: docRef.id }, balance);
 				commit("newBalance", newBalance);
+				router.push('Balance')
 			})
 			.catch(error => console.log(error));
 	},
@@ -71,6 +86,7 @@ const actions = {
 const mutations = {
 	setBalances: (state, balances) => (state.balances = balances),
 	newBalance: (state, balance) => state.balances.push(balance),
+	setLastBalance: (state, lastBalance) => (state.lastBalance = lastBalance),
 	removeBalance: (state, id) =>
 		(state.balances = state.balances.filter(balance => balance.id !== id)),
 	modifyBalance: (state, updatedBalance) => {
