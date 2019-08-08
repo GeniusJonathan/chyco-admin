@@ -184,7 +184,7 @@ export default {
             "Must be a two decimal value"
       ],
       headers: [
-         { text: "Date", value: "date", align: "left", sortable: true },
+         { text: "Date", value: "date", align: "left", sortable: true, width: "114px" },
          { text: "Source", value: "source", align: "left" },
          { text: "Description", value: "description", align: "left" },
          { text: "Amount", value: "amount", align: "right" },
